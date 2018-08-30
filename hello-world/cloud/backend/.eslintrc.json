@@ -1,0 +1,9 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "no-param-reassign": ["error", { "ignorePropertyModificationsFor": ["$scope"] }],
+    "spaced-comment": ["error", "always", { "markers": ["global", ","]}],
+    "new-cap": ["error", { "capIsNewExceptions": ["Router"]}],
+    "comma-dangle":[2,"never"]
+  }
+}
