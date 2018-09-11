@@ -5,4 +5,9 @@ config.meshbluDefault = {
   port: '3000'
 };
 
+config.backendDefault = {
+  host: 'http://localhost',
+  port: '3002'
+};
+
 module.exports = config;

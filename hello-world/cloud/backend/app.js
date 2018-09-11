@@ -4,10 +4,21 @@ const favicon = require('static-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const socketio = require('socket.io');
+const cors = require('cors');
 
 const devices = require('./routes/devices');
 
 const app = express();
+
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:3003'
+}));
+
+const io = socketio();
+app.io = io;
+const subscribe = require('./routes/subscribe')(io);
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -49,5 +60,10 @@ app.use((err, req, res) => {
   });
 });
 
+// socket.io events
+io.on('connection', (socket) => {
+  console.log('A user connected'); // eslint-disable-line no-console
+  socket.on('subscribe', client => subscribe(client));
+});
 
 module.exports = app;
