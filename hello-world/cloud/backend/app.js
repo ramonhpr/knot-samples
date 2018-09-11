@@ -5,6 +5,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
+const devices = require('./routes/devices');
+
 const app = express();
 
 app.use(favicon());
@@ -13,6 +15,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/devices', devices);
 
 // catch 404 and forwarding to error handler
 app.use((req, res, next) => {

@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
+    "lodash": "^4.17.11",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts": "1.1.5"
+    "react-scripts": "1.1.5",
+    "semantic-ui-css": "^2.3.3",
+    "semantic-ui-react": "^0.82.4"
   },
   "scripts": {
     "start": "PORT=3003 BROWSER=none react-scripts start",

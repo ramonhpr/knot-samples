@@ -7,11 +7,18 @@
   height: 80px;
 }
 
+.header-wrapper {
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 100%;
   padding: 20px;
   color: white;
+  background-color: green;
 }
 
 .App-title {
@@ -25,4 +32,80 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* Split the screen in half */
+.knot-info-wrapper {
+  height: 100%;
+  width: 25%;
+  position: absolute;
+  z-index: 1;
+  overflow: hidden;
+  padding-top: 100px;
+  left: 0;
+}
+
+input {
+  display: block;
+  text-align: center;
+}
+
+label {
+  display: block;
+}
+
+.knot-info {
+  margin: 10px;
+}
+
+.knot-info-text {
+  border-radius: 5px;
+  margin: auto;
+}
+
+.btn {
+  background-color: green;
+  border-radius: 25px;
+  color: white;
+}
+
+.list-devices-wrapper {
+  height: 100%;
+  width: 70%;
+  position: absolute;
+  z-index: 1;
+  overflow: hidden;
+  padding-top: 100px;
+  right: 0;
+}
+.online-devices-header {
+  position: relative;
+  padding-bottom: 2%;
+}
+.online-device {
+  position: relative;
+  display: inline-block;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 4px 8px 4px rgba(0, 0, 0, 0.2);
+}
+
+.device-info {
+  position: relative;
+  float: left;
+  vertical-align: middle;
+  padding: 10px;
+}
+
+.device-name {
+  font-size: 1.5em;
+}
+
+.device-id {
+  font-size: 0.5em;
+}
+
+.device-value {
+  position: relative;
+  float: right;
 }
