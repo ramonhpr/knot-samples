@@ -8,28 +8,14 @@ import { meshbluDefault } from './config';
 const meshbluDefaultHost = meshbluDefault.host;
 const meshbluDefaultPort = meshbluDefault.port;
 
-const createDeviceCard = device => (
-  <div className="online-device" id={device.id} key={device.id}>
-    <div className="device-info">
-      <div className="device-name">
-        {device.name}
-      </div>
-      <div className="device-id">
-        {device.id}
-      </div>
-    </div>
-    <div className="device-value">
-      {device.value ? <Icon name="lightbulb outline" color="yellow" size="massive" /> : <Icon name="lightbulb" color="black" size="massive" />}
-    </div>
-  </div>);
-
-
 class App extends Component {
   constructor() {
     super();
     this.state = {};
+    this.createDeviceCard = this.createDeviceCard.bind(this);
     this.createDeviceList = this.createDeviceList.bind(this);
     this.getDevices = this.getDevices.bind(this);
+    this.switchStatus = this.switchStatus.bind(this);
   }
 
   getDevices() {
@@ -65,6 +51,53 @@ class App extends Component {
       });
   }
 
+  switchStatus(deviceId, sensorId, value) {
+    const { uuid } = this.state;
+    const { token } = this.state;
+    const { host } = this.state;
+    const { port } = this.state;
+
+    axios.put(`/devices/${deviceId}/sensors/${sensorId}`, {
+      data: {
+        value: value ? 'false' : 'true'
+      }
+    }, {
+      headers: {
+        'Meshblu-Host': host || meshbluDefaultHost,
+        'Meshblu-Port': port || meshbluDefaultPort,
+        'Meshblu-Auth-UUID': uuid,
+        'Meshblu-Auth-Token': token
+      }
+    })
+      .then(() => { // eslint-disable-next-line no-alert
+        window.alert('Status updated!');
+      })
+      .catch((error) => { // eslint-disable-next-line no-alert
+        window.alert(`An error occured. Check the information provided and try again. ${error}.`);
+      });
+  }
+
+  createDeviceCard(device) {
+    return (
+      <div className="online-device" id={device.id} key={device.id}>
+        <div className="device-info">
+          <div className="device-name">
+            {device.name}
+          </div>
+          <div className="device-id">
+            {device.id}
+          </div>
+        </div>
+        <div className="device-value">
+          {device.value ? <Icon name="lightbulb outline" color="yellow" size="massive" /> : <Icon name="lightbulb" color="black" size="massive" />}
+        </div>
+        <button type="button" className="switch" onClick={() => this.switchStatus(device.id, device.sensorid, device.value)}>
+              CHANGE VALUE
+        </button>
+      </div>
+    );
+  }
+
   createDeviceList() {
     const { devices } = this.state;
 
@@ -73,7 +106,7 @@ class App extends Component {
         <h1 className="online-devices-header">
           ONLINE DEVICES
         </h1>
-        {_.map(devices, createDeviceCard)}
+        {_.map(devices, this.createDeviceCard)}
       </div>
     );
   }

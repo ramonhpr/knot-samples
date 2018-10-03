@@ -109,3 +109,12 @@ label {
   position: relative;
   float: right;
 }
+
+.switch {
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+  background-color: green;
+  border-radius: 25px;
+  color: white;
+}
