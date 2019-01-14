@@ -68,7 +68,7 @@ router.put('/:deviceId/sensors/:sensorId', async (req, res) => {
   } catch (err) {
     res.status(500).send(err);
   } finally {
-    await cloud.close;
+    await cloud.close();
   }
 });
 
