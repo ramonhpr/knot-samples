@@ -13,7 +13,7 @@ $ cd cloud/backend
 $ npm install (or yarn install)
 $ npm start (or yarn start)
 ```
-This will start the backend API on port 3003.
+This will start the backend API on port 3002.
 If you want to use another port make sure to change the proxy property on the
 package.json inside the frontend folder
 
@@ -24,4 +24,4 @@ $ npm install (or yarn install)
 $ npm start (or yarn start)
 ```
 
-This will start the frontend on port 3002
+This will start the frontend on port 3003
