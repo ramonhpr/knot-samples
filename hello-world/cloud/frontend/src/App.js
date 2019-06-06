@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import KNoTCloudWebSocket from '@cesarbr/knot-cloud-sdk-js/clients/ws';
 import KNoTCloudWebSocket from '@cesarbr/knot-cloud-websocket';
 import _ from 'lodash';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Form, Message, Input, Dropdown } from 'semantic-ui-react';
 import { cloud } from './config';
 import './App.css';
 
@@ -10,8 +10,10 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      protocol: cloud.protocol,
       host: cloud.host,
-      port: cloud.port
+      port: cloud.port,
+      isLoading: false
     };
     this.createDeviceCard = this.createDeviceCard.bind(this);
     this.createDeviceList = this.createDeviceList.bind(this);
@@ -21,19 +23,21 @@ class App extends Component {
 
   getDevices() {
     const { uuid, token } = this.state;
-    const { host, port } = this.state;
+    const { protocol, host, port } = this.state;
+    this.setState({ isLoading: true });
 
     if (!uuid) {
-      window.alert('UUID is mandatory'); // eslint-disable-line no-alert
+      this.setState({ msgError: 'UUID is mandatory', isLoading: false });
       return;
     }
     if (!token) {
-      window.alert('TOKEN is mandatory'); // eslint-disable-line no-alert
+      this.setState({ msgError: 'TOKEN is mandatory', isLoading: false });
       return;
     }
 
+    console.log(protocol);
     const socket = new KNoTCloudWebSocket({
-      protocol: 'wss',
+      protocol,
       hostname: host,
       port,
       pathname: '/',
@@ -48,12 +52,13 @@ class App extends Component {
     socket.once('ready', () => {
       socket.once('devices', (devices) => {
         this.setState({ devices });
+        this.setState({ isLoading: false, msgError: null });
         socket.close();
       });
       socket.getDevices({ type: 'knot:thing' });
     });
     socket.once('error', (err) => {
-      window.alert(`An error occured. Check the information provided and try again. ${err}.`);
+      this.setState({ isLoading: false, msgError: `${err.message}: Check the information provided and try again` });
       socket.close();
     });
     socket.connect();
@@ -67,7 +72,7 @@ class App extends Component {
       socket.setData(deviceId, [{ sensorId, value: !value }]);
     });
     socket.once('error', (err) => {
-      window.alert(`An error occured. Check the information provided and try again. ${err}.`);
+      this.setState({ isLoading: false, msgError: `${err.message}: Check the information provided and try again` });
       socket.close();
     });
     socket.connect();
@@ -113,7 +118,15 @@ class App extends Component {
   }
 
   render() {
-    const { devices, host, port } = this.state;
+    const {
+      devices, protocol, host, port, isLoading, msgError
+    } = this.state;
+    const protocolOptions = [
+      { key: 'ws', text: 'ws://', value: 'ws' },
+      { key: 'wss', text: 'wss://', value: 'wss' }
+    ];
+    // TODO: make options to protocol ws and wss with Dropdown
+    // https://react.semantic-ui.com/elements/input/#variations-right-labeled
 
     return (
       <div className="App">
@@ -123,33 +136,59 @@ class App extends Component {
           </header>
         </div>
         <div className="knot-info-wrapper">
-          <div className="knot-info">
-            <label htmlFor="host">
-              KNOT CLOUD HOST
-              <input type="text" id="host" className="knot-info-text" placeholder={host} onChange={e => this.setState({ host: e.target.value })} />
-            </label>
-          </div>
-          <div className="knot-info">
-            <label htmlFor="port">
-              KNOT CLOUD PORT
-              <input type="text" id="port" className="knot-info-text" placeholder={port} onChange={e => this.setState({ port: e.target.value })} />
-            </label>
-          </div>
-          <div className="knot-info">
-            <label htmlFor="uuid">
-              UUID
-              <input type="text" id="uuid" className="knot-info-text" onChange={e => this.setState({ uuid: e.target.value })} />
-            </label>
-          </div>
-          <div className="knot-info">
-            <label htmlFor="token">
-              TOKEN
-              <input type="text" id="token" className="knot-info-text" onChange={e => this.setState({ token: e.target.value })} />
-            </label>
-          </div>
-          <button type="button" className="btn" onClick={this.getDevices}>
-          GET DEVICES
-          </button>
+          <Form loading={isLoading} error={msgError}>
+            <Form.Field>
+              <label>KNOT CLOUD HOST</label>
+              <Form.Input
+                fluid
+                as={Input}
+                label={<Dropdown
+                  defaultValue={protocol}
+                  onChange={(e, data) => this.setState({ protocol: data.value })}
+                  options={protocolOptions} />}
+                type="text"
+                id="host"
+                placeholder={host}
+                onChange={e => this.setState({ host: e.target.value })}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.Input
+                fluid
+                label="KNOT CLOUD PORT"
+                type="number"
+                id="port"
+                placeholder={port}
+                onChange={e => this.setState({ port: e.target.value })}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.Input
+                fluid
+                label="UUID"
+                type="text"
+                id="uuid"
+                className="knot-info-text"
+                onChange={e => this.setState({ uuid: e.target.value })}
+                required
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.Input
+                fluid
+                label="TOKEN"
+                type="text"
+                id="token"
+                className="knot-info-text"
+                onChange={e => this.setState({ token: e.target.value })}
+                required
+              />
+            </Form.Field>
+            <Message error header={msgError} hidden={_.isEmpty(msgError)} />
+            <Form.Button type="submit" color="green" onClick={this.getDevices}>
+              GET DEVICES
+            </Form.Button>
+          </Form>
         </div>
         <div className="list-devices-wrapper">
           {_.isEmpty(devices) ? <div /> : <this.createDeviceList className="list-devices" />}
