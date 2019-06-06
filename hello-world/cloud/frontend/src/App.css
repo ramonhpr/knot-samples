@@ -75,15 +75,24 @@ label {
   width: 70%;
   position: absolute;
   z-index: 1;
-  overflow: hidden;
   padding-top: 100px;
+  padding-left: 1px;
   right: 0;
 }
-.online-devices-header {
+
+.device-grid {
+  z-index: 1;
+  overflow-x: hidden;
+  position: absolute;
+  max-height: 650px;
+}
+
+.devices-header {
   position: relative;
   padding-bottom: 2%;
 }
-.online-device {
+
+.device {
   position: relative;
   display: inline-block;
   border-radius: 25px;

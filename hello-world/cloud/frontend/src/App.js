@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 // import KNoTCloudWebSocket from '@cesarbr/knot-cloud-sdk-js/clients/ws';
 import KNoTCloudWebSocket from '@cesarbr/knot-cloud-websocket';
 import _ from 'lodash';
-import { Icon, Form, Message, Input, Dropdown } from 'semantic-ui-react';
+import {
+  Icon, Form, Message, Input, Dropdown, Card, Button
+} from 'semantic-ui-react';
 import { cloud } from './config';
 import './App.css';
 
@@ -81,26 +83,32 @@ class App extends Component {
   createDeviceCard(device) {
     const { id } = device.knot;
     const { name } = device.metadata;
-    const { sensorId } = device.schema[0];
+    let sensorId;
+    if (device.schema) {
+      ([{ sensorId }] = device.schema);
+    } else { // Ignore devices without schema
+      return null;
+    }
 
     return (
-      <div className="online-device" id={id} key={id}>
-        <div className="device-info">
-          <div className="device-name">
+      <Card className="online-device" id={id} key={id}>
+        <Card.Content className="device-info">
+          <Card.Header className="device-name">
+            {device.value ? <Icon name="lightbulb outline" color="yellow" size="big" /> : <Icon name="lightbulb" color="black" size="big" />}
             {name}
-          </div>
-          <div className="device-id">
+            {/* TODO: change to consume storage API */}
+          </Card.Header>
+          <Card.Meta className="device-id">
             {id}
-          </div>
-        </div>
-        {/* TODO: change to consume storage API */}
-        <div className="device-value">
-          {device.value ? <Icon name="lightbulb outline" color="yellow" size="massive" /> : <Icon name="lightbulb" color="black" size="massive" />}
-        </div>
-        <button type="button" className="switch" onClick={() => this.switchStatus(id, sensorId, device.value)}>
-              CHANGE VALUE
-        </button>
-      </div>
+          </Card.Meta>
+        </Card.Content>
+
+        <Card.Content extra>
+          <Button type="button" color="green" onClick={() => this.switchStatus(id, sensorId, device.value)}>
+            CHANGE VALUE
+          </Button>
+        </Card.Content>
+      </Card>
     );
   }
 
@@ -108,11 +116,13 @@ class App extends Component {
     const { devices } = this.state;
 
     return (
-      <div id="online-devices">
-        <h1 className="online-devices-header">
-          ONLINE DEVICES
+      <div id="devices">
+        <h1 className="devices-header">
+          DEVICES
         </h1>
-        {_.map(devices, this.createDeviceCard)}
+        <Card.Group className="device-grid">
+          {_.map(devices, this.createDeviceCard)}
+        </Card.Group>
       </div>
     );
   }
