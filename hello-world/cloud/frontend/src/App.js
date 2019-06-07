@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import KNoTCloudWebSocket from '@cesarbr/knot-cloud-websocket';
 import _ from 'lodash';
 import {
-  Icon, Form, Message, Input, Dropdown, Card, Button
+  Icon, Form, Message, Input, Dropdown, Card, Button, Menu
 } from 'semantic-ui-react';
 import { cloud } from './config';
 import './App.css';
@@ -140,11 +140,9 @@ class App extends Component {
 
     return (
       <div className="App">
-        <div className="header-wrapper">
-          <header className="App-header">
-            <h1 className="App-title">Welcome to KNoT</h1>
-          </header>
-        </div>
+        <Menu inverted color="green" size="small">
+          <Menu.Item as="h2" active>Welcome to KNoT</Menu.Item>
+        </Menu>
         <div className="knot-info-wrapper">
           <Form loading={isLoading} error={msgError}>
             <Form.Field>

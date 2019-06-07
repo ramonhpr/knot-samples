@@ -7,20 +7,6 @@
   height: 80px;
 }
 
-.header-wrapper {
-  width: 100%;
-  position: absolute;
-  top: 0;
-}
-
-.App-header {
-  background-color: #222;
-  height: 100%;
-  padding: 20px;
-  color: white;
-  background-color: green;
-}
-
 .App-title {
   font-size: 1.5em;
 }
@@ -41,7 +27,6 @@
   position: absolute;
   z-index: 1;
   overflow: hidden;
-  padding-top: 100px;
   padding-left: 10px;
   left: 0;
 }
@@ -75,9 +60,9 @@ label {
   width: 70%;
   position: absolute;
   z-index: 1;
-  padding-top: 100px;
   padding-left: 1px;
   right: 0;
+  max-height: 650px;
 }
 
 .device-grid {
