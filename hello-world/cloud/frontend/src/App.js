@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
 // import KNoTCloudWebSocket from '@cesarbr/knot-cloud-sdk-js/clients/ws';
 import KNoTCloudWebSocket from '@cesarbr/knot-cloud-websocket';
 import _ from 'lodash';
@@ -7,6 +8,10 @@ import {
 } from 'semantic-ui-react';
 import { cloud } from './config';
 import './App.css';
+import Login from './scenes/Login';
+import Home from './scenes/Home';
+import { ContextProvider } from './context/store';
+// import Steps from './scenes/Steps';
 
 class App extends Component {
   constructor() {
@@ -137,73 +142,82 @@ class App extends Component {
     ];
     // TODO: make options to protocol ws and wss with Dropdown
     // https://react.semantic-ui.com/elements/input/#variations-right-labeled
-
-    return (
-      <div className="App">
-        <Menu inverted color="green" size="small">
-          <Menu.Item as="h2" active>Welcome to KNoT</Menu.Item>
-        </Menu>
-        <div className="knot-info-wrapper">
-          <Form loading={isLoading} error={msgError}>
-            <Form.Field>
-              <label>KNOT CLOUD HOST</label>
-              <Form.Input
-                fluid
-                as={Input}
-                label={<Dropdown
-                  defaultValue={protocol}
-                  onChange={(e, data) => this.setState({ protocol: data.value })}
-                  options={protocolOptions} />}
-                type="text"
-                id="host"
-                placeholder={host}
-                onChange={e => this.setState({ host: e.target.value })}
-              />
-            </Form.Field>
-            <Form.Field>
-              <Form.Input
-                fluid
-                label="KNOT CLOUD PORT"
-                type="number"
-                id="port"
-                placeholder={port}
-                onChange={e => this.setState({ port: e.target.value })}
-              />
-            </Form.Field>
-            <Form.Field>
-              <Form.Input
-                fluid
-                label="UUID"
-                type="text"
-                id="uuid"
-                className="knot-info-text"
-                onChange={e => this.setState({ uuid: e.target.value })}
-                required
-              />
-            </Form.Field>
-            <Form.Field>
-              <Form.Input
-                fluid
-                label="TOKEN"
-                type="text"
-                id="token"
-                className="knot-info-text"
-                onChange={e => this.setState({ token: e.target.value })}
-                required
-              />
-            </Form.Field>
-            <Message error header={msgError} hidden={_.isEmpty(msgError)} />
-            <Form.Button type="submit" color="green" onClick={this.getDevices}>
-              GET DEVICES
-            </Form.Button>
-          </Form>
-        </div>
-        <div className="list-devices-wrapper">
-          {_.isEmpty(devices) ? <div /> : <this.createDeviceList className="list-devices" />}
-        </div>
-      </div>
-    );
+    return null;
+    // return (
+    //   <div className="App">
+    //     <Menu inverted color="green" size="small">
+    //       <Menu.Item as="h2" active>Welcome to KNoT</Menu.Item>
+    //     </Menu>
+    //     <div className="knot-info-wrapper">
+    //       <Form loading={isLoading} error={msgError}>
+    //         <Form.Field>
+    //           <label>KNOT CLOUD HOST</label>
+    //           <Form.Input
+    //             fluid
+    //             as={Input}
+    //             label={<Dropdown
+    //               defaultValue={protocol}
+    //               onChange={(e, data) => this.setState({ protocol: data.value })}
+    //               options={protocolOptions} />}
+    //             type="text"
+    //             id="host"
+    //             placeholder={host}
+    //             onChange={e => this.setState({ host: e.target.value })}
+    //           />
+    //         </Form.Field>
+    //         <Form.Field>
+    //           <Form.Input
+    //             fluid
+    //             label="KNOT CLOUD PORT"
+    //             type="number"
+    //             id="port"
+    //             placeholder={port}
+    //             onChange={e => this.setState({ port: e.target.value })}
+    //           />
+    //         </Form.Field>
+    //         <Form.Field>
+    //           <Form.Input
+    //             fluid
+    //             label="UUID"
+    //             type="text"
+    //             id="uuid"
+    //             className="knot-info-text"
+    //             onChange={e => this.setState({ uuid: e.target.value })}
+    //             required
+    //           />
+    //         </Form.Field>
+    //         <Form.Field>
+    //           <Form.Input
+    //             fluid
+    //             label="TOKEN"
+    //             type="text"
+    //             id="token"
+    //             className="knot-info-text"
+    //             onChange={e => this.setState({ token: e.target.value })}
+    //             required
+    //           />
+    //         </Form.Field>
+    //         <Message error header={msgError} hidden={_.isEmpty(msgError)} />
+    //         <Form.Button type="submit" color="green" onClick={this.getDevices}>
+    //           GET DEVICES
+    //         </Form.Button>
+    //       </Form>
+    //     </div>
+    //     <div className="list-devices-wrapper">
+    //       {_.isEmpty(devices) ? <div /> : <this.createDeviceList className="list-devices" />}
+    //     </div>
+    //   </div>
+    // );
   }
 }
 
-export default App;
+const MyApp = () => {
+  return <ContextProvider>
+    <BrowserRouter>
+      <Route path='/login' component={Login} />
+      <Route exact path='/' component={Home} />
+    </BrowserRouter>
+  </ContextProvider>;
+}
+
+export default MyApp;

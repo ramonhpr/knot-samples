@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@cesarbr/knot-cloud-sdk-js-authenticator": "file:../../../../knot-cloud-sdk-js-authenticator",
     "@cesarbr/knot-cloud-websocket": "^1.1.1",
     "lodash": "^4.17.11",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "react-router-dom": "^5.0.1",
     "react-scripts": "1.1.5",
     "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.4"

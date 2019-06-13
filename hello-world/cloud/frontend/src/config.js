@@ -1,7 +1,7 @@
 const config = {
   cloud: {
     protocol: 'wss',
-    host: 'ws.knot.cloud',
+    host: 'knot.cloud',
     port: '443'
   }
 };
