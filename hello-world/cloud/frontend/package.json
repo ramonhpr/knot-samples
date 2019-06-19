@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@cesarbr/knot-cloud-sdk-js-storage": "file:../../../../knot-cloud-sdk-js-storage",
     "@cesarbr/knot-cloud-websocket": "^1.1.1",
     "http-proxy-middleware": "^0.19.1",
     "lodash": "^4.17.11",
