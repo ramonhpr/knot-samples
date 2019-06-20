@@ -7,7 +7,7 @@ import {
 import { Context } from '../../context/store';
 
 const Home = () => {
-  const { credentials, cloud, logout } = useContext(Context);
+  const { credentials, cloud, storage, logout } = useContext(Context);
   const [isLoading, setIsLoading] = useState(() => true);
   const [msgError, setMsgError] = useState(() => '');
   const [devices, setDevices] = useState(() => []);
@@ -44,6 +44,17 @@ const Home = () => {
     cloud.connect();
   }
 
+  const getMostRecentData = async (deviceId, sensorId) => {
+    const query = { take: 1, orderBy: 'timestamp', order: -1 };
+
+    console.log('storage');
+    const [data] = await storage.listDataBySensor(deviceId, sensorId, query);
+    console.log('data', data);
+
+    if (data)
+      return data.value;
+  };
+
   const createDeviceCard = (device) => {
     const { id } = device.knot;
     const { name } = device.metadata;
@@ -53,12 +64,14 @@ const Home = () => {
     } else { // Ignore devices without schema
       return null;
     }
+    let value = false;
+    getMostRecentData(id, sensorId).then((v) => { value = v; });
 
     return (
       <Card className="online-device" id={id} key={id}>
         <Card.Content className="device-info">
           <Card.Header className="device-name">
-            {device.value ? <Icon name="lightbulb outline" color="yellow" size="big" /> : <Icon name="lightbulb" color="black" size="big" />}
+            {value ? <Icon name="lightbulb outline" color="yellow" size="big" /> : <Icon name="lightbulb" color="black" size="big" />}
             {name}
             {/* TODO: change to consume storage API */}
           </Card.Header>
