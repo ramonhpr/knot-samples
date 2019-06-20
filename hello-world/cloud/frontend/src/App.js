@@ -3,16 +3,12 @@ import React, { Component } from 'react';
 import KNoTCloudWebSocket from '@cesarbr/knot-cloud-websocket';
 import _ from 'lodash';
 import { Icon } from 'semantic-ui-react';
-import { cloud } from './config';
 import './App.css';
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      host: cloud.host,
-      port: cloud.port
-    };
+    this.state = {};
     this.createDeviceCard = this.createDeviceCard.bind(this);
     this.createDeviceList = this.createDeviceList.bind(this);
     this.getDevices = this.getDevices.bind(this);
@@ -21,7 +17,8 @@ class App extends Component {
 
   getDevices() {
     const { uuid, token } = this.state;
-    const { host, port } = this.state;
+    const { hostname } = window.location;
+    const port = window.location.protocol === 'https:' ? 443 : 80;
 
     if (!uuid) {
       window.alert('UUID is mandatory'); // eslint-disable-line no-alert
@@ -33,10 +30,10 @@ class App extends Component {
     }
 
     const socket = new KNoTCloudWebSocket({
-      protocol: 'wss',
-      hostname: host,
+      protocol: port === 443 ? 'wss' : 'ws',
+      hostname,
       port,
-      pathname: '/',
+      pathname: '/ws',
       id: uuid,
       token
     });
